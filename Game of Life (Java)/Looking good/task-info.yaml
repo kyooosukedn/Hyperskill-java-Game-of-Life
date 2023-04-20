@@ -1,0 +1,90 @@
+type: edu
+custom_name: Looking good!
+files:
+- name: src/life/Main.java
+  visible: true
+  text: "package life;\n\nimport java.util.Random;\nimport java.util.Scanner;\n\n\
+    public class Main {\n    static Scanner scanner = new Scanner(System.in);\n  \
+    \  static int firstInput = scanner.nextInt();\n    static int secondInput = scanner.nextInt();\n\
+    \    public static char[][] cells = new char[firstInput][firstInput];\n\n    \n\
+    \    public static void main(String[] args) {\n        Random random = new Random(secondInput);\
+    \        \n\n        for (int i = 0; i < firstInput; i++) {\n            for (int\
+    \ j = 0; j < firstInput; j++) {\n                boolean randomBool = random.nextBoolean();\n\
+    \                if (randomBool) {\n                    cells[i][j] = 'O';\n \
+    \               } else {\n                    cells[i][j] = ' ';\n           \
+    \     }\n            }\n        }\n\n        printGrid();\n    }\n\n    public\
+    \ static void printGrid() {\n        for (int i = 0; i < firstInput; i++) {\n\
+    \            for (int j = 0; j < firstInput; j++) {\n                System.out.print(cells[i][j]);\n\
+    \            }\n            System.out.println(\"\");\n        }\n    }\n}\n"
+  learner_created: false
+- name: test/GameOfLifeTest.java
+  visible: false
+  text: |
+    import life.GameOfLife;
+    import org.assertj.swing.fixture.JLabelFixture;
+    import org.hyperskill.hstest.dynamic.DynamicTest;
+    import org.hyperskill.hstest.stage.SwingTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testing.swing.SwingComponent;
+
+    import java.util.regex.Matcher;
+    import java.util.regex.Pattern;
+
+    import static org.hyperskill.hstest.testcase.CheckResult.correct;
+    import static org.hyperskill.hstest.testcase.CheckResult.wrong;
+
+    public class GameOfLifeTest extends SwingTest {
+
+        public GameOfLifeTest() {
+            super(new GameOfLife());
+        }
+
+        @SwingComponent(name = "GenerationLabel")
+        JLabelFixture generationLabel;
+
+        @SwingComponent(name = "AliveLabel")
+        JLabelFixture aliveLabel;
+
+        @DynamicTest(order = 1)
+        CheckResult testWindow() {
+            requireVisible(window);
+            return correct();
+        }
+
+        @DynamicTest(order = 2)
+        CheckResult testGenerationLabel() {
+            requireEnabled(generationLabel);
+            requireVisible(generationLabel);
+            return correct();
+        }
+
+        @DynamicTest(order = 3)
+        CheckResult testAliveLabel() {
+            requireEnabled(aliveLabel);
+            requireVisible(aliveLabel);
+            return correct();
+        }
+
+        @DynamicTest(order = 4)
+        CheckResult testForInteger() {
+
+            Pattern pattern = Pattern.compile("\\d+");
+            Matcher matcher = pattern.matcher(generationLabel.text());
+
+            if (!matcher.find()) {
+                return wrong("The 'GenerationLabel' doesn't contain an integer number!");
+            }
+
+            matcher = pattern.matcher(aliveLabel.text());
+
+            if (!matcher.find()) {
+                return wrong("The 'AliveLabel' doesn't contain an integer number!");
+            }
+
+            return correct();
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/5440#comment
+status: Unchecked
+record: -1
